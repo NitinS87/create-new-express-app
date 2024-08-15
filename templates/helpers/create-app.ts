@@ -2,13 +2,13 @@
 import { mkdirSync } from "node:fs";
 import { basename, dirname, join, resolve } from "node:path";
 import { green, cyan } from "picocolors";
-import { isFolderEmpty } from "./helpers/is-folder-empty";
-import type { PackageManager } from "./helpers/get-pkg-manager";
-import { tryGitInit } from "./helpers/git";
-import { isWriteable } from "./helpers/is-writeable";
-import { getOnline } from "./helpers/is-online";
-import { installTemplate } from "./helpers/install-template";
-import { TemplateMode, TemplateType } from "./helpers/types";
+import { isFolderEmpty } from "./is-folder-empty";
+import type { PackageManager } from "./get-pkg-manager";
+import { tryGitInit } from "./git";
+import { isWriteable } from "./is-writeable";
+import { getOnline } from "./is-online";
+import { installTemplate } from "./install-template";
+import { TemplateMode, TemplateType } from "./types";
 
 export class DownloadError extends Error {}
 

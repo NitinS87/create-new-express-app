@@ -2,8 +2,6 @@
   "name": "create-new-express-app",
   "version": "1.0.0",
   "description": "A CLI tool to create a TypeScript Express application with best practices",
-  "main": "build/index.js",
-  "type": "module",
   "bin": {
     "create-new-express-app": "./build/index.js"
   },
@@ -39,6 +37,7 @@
   "devDependencies": {
     "@types/async-retry": "^1.4.8",
     "@types/cross-spawn": "^6.0.6",
+    "@types/fs-extra": "^11.0.4",
     "@types/node": "^22.3.0",
     "@types/prompts": "^2.4.9",
     "@types/validate-npm-package-name": "^4.0.2",
@@ -49,6 +48,7 @@
     "conf": "^13.0.1",
     "cross-spawn": "^7.0.3",
     "fast-glob": "^3.3.2",
+    "fs-extra": "^11.2.0",
     "picocolors": "^1.0.1",
     "prompts": "^2.4.2",
     "typescript": "^5.5.4",

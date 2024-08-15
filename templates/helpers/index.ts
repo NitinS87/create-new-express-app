@@ -8,10 +8,10 @@ import Conf from "conf";
 import updateCheck from "update-check";
 import ciInfo from "ci-info";
 import prompts, { type InitialReturnValue } from "prompts";
-import packageJson from "./package.json";
-import { getPkgManager, type PackageManager } from "./helpers/get-pkg-manager";
-import { validateNpmName } from "./helpers/validate-pkg";
-import { isFolderEmpty } from "./helpers/is-folder-empty";
+import packageJson from "../package.json";
+import { getPkgManager, type PackageManager } from "./get-pkg-manager";
+import { validateNpmName } from "./validate-pkg";
+import { isFolderEmpty } from "./is-folder-empty";
 import { createApp, DownloadError } from "./create-app";
 
 let projectPath: string = "";
