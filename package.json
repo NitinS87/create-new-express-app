@@ -1,0 +1,39 @@
+{
+  "name": "create-express-typescript",
+  "version": "1.0.0",
+  "description": "REST API express typescript template with Jest, Prisma and Zod",
+  "main": "index.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NitinS87/create-express-typescript.git"
+  },
+  "author": "Nitin Sharma <nitins9868@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/NitinS87/create-express-typescript/issues"
+  },
+  "homepage": "https://github.com/NitinS87/create-express-typescript#readme",
+  "keywords": [
+    "Node.js",
+    "Express",
+    "Typescript",
+    "Zod",
+    "Prisma",
+    "Jest",
+    "Morgan",
+    "Winston",
+    "Prettier",
+    "ESLint",
+    "Husky"
+  ],
+  "dependencies": {
+    "commander": "^12.1.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.3.0",
+    "typescript": "^5.5.4"
+  }
+}
