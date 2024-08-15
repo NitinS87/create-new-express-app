@@ -8,10 +8,9 @@
     "create-new-express-app": "./build/index.js"
   },
   "files": [
-    "dist"
+    "build"
   ],
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc"
   },
   "repository": {
