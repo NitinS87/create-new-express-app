@@ -40,4 +40,12 @@ program
     }
   });
 
+// Add help option
+program.on("--help", () => {
+  console.log("");
+  console.log("Examples:");
+  console.log("  $ create-new-express-app my-app");
+  console.log("  $ create-new-express-app");
+});
+
 program.parse(process.argv);
