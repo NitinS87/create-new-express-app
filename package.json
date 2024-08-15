@@ -6,10 +6,14 @@
     "create-new-express-app": "./build/index.js"
   },
   "files": [
-    "build"
+    "build",
+    "templates",
+    "LICENSE",
+    "README.md"
   ],
   "scripts": {
-    "build": "tsc"
+    "build": "tsc",
+    "start": "node build/index.js"
   },
   "repository": {
     "type": "git",
