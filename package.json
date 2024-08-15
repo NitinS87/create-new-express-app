@@ -1,21 +1,29 @@
 {
-  "name": "create-express-typescript",
+  "name": "create-new-express-app",
   "version": "1.0.0",
-  "description": "REST API express typescript template with Jest, Prisma and Zod",
-  "main": "index.ts",
+  "description": "A CLI tool to create a TypeScript Express application with best practices",
+  "main": "build/index.js",
+  "type": "module",
+  "bin": {
+    "create-new-express-app": "./build/index.js"
+  },
+  "files": [
+    "dist"
+  ],
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/NitinS87/create-express-typescript.git"
+    "url": "git+https://github.com/NitinS87/create-new-express-app.git"
   },
   "author": "Nitin Sharma <nitins9868@gmail.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/NitinS87/create-express-typescript/issues"
+    "url": "https://github.com/NitinS87/create-new-express-app/issues"
   },
-  "homepage": "https://github.com/NitinS87/create-express-typescript#readme",
+  "homepage": "https://github.com/NitinS87/create-new-express-app#readme",
   "keywords": [
     "Node.js",
     "Express",
@@ -29,11 +37,26 @@
     "ESLint",
     "Husky"
   ],
-  "dependencies": {
-    "commander": "^12.1.0"
-  },
   "devDependencies": {
+    "@types/async-retry": "^1.4.8",
+    "@types/cross-spawn": "^6.0.6",
     "@types/node": "^22.3.0",
-    "typescript": "^5.5.4"
+    "@types/prompts": "^2.4.9",
+    "@types/validate-npm-package-name": "^4.0.2",
+    "async-retry": "^1.3.3",
+    "async-sema": "^3.1.1",
+    "ci-info": "^4.0.0",
+    "commander": "^12.1.0",
+    "conf": "^13.0.1",
+    "cross-spawn": "^7.0.3",
+    "fast-glob": "^3.3.2",
+    "picocolors": "^1.0.1",
+    "prompts": "^2.4.2",
+    "typescript": "^5.5.4",
+    "update-check": "^1.5.4",
+    "validate-npm-package-name": "^5.0.1"
+  },
+  "engines": {
+    "node": ">=18.18.0"
   }
 }
