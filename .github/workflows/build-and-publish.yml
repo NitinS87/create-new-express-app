@@ -2,7 +2,7 @@ name: Build and Publish
 
 on:
   release:
-    types: [published]
+    types: [published, edited]
 
 jobs:
   build:
@@ -17,11 +17,40 @@ jobs:
         with:
           node-version: "20"
 
+      - name: Detect package manager
+        id: detect-package-manager
+        run: |
+          if [ -f package-lock.json ]; then
+            echo "PACKAGE_MANAGER=npm" >> $GITHUB_ENV
+          elif [ -f pnpm-lock.yaml ]; then
+            echo "PACKAGE_MANAGER=pnpm" >> $GITHUB_ENV
+          elif [ -f yarn.lock ]; then
+            echo "PACKAGE_MANAGER=yarn" >> $GITHUB_ENV
+          else
+            echo "No supported package manager lock file found."
+            exit 1
+          fi
+
       - name: Install dependencies
-        run: npm install
+        run: |
+          if [ "${{ env.PACKAGE_MANAGER }}" = "npm" ]; then
+            npm install
+          elif [ "${{ env.PACKAGE_MANAGER }}" = "pnpm" ]; then
+            npm install -g pnpm
+            pnpm install
+          elif [ "${{ env.PACKAGE_MANAGER }}" = "yarn" ]; then
+            yarn install
+          fi
 
       - name: Build the project
-        run: npm run build
+        run: |
+          if [ "${{ env.PACKAGE_MANAGER }}" = "npm" ]; then
+            npm run build
+          elif [ "${{ env.PACKAGE_MANAGER }}" = "pnpm" ]; then
+            pnpm run build
+          elif [ "${{ env.PACKAGE_MANAGER }}" = "yarn" ]; then
+            yarn build
+          fi
 
   publish:
     runs-on: ubuntu-latest
@@ -37,11 +66,40 @@ jobs:
           node-version: "20.x"
           registry-url: "https://registry.npmjs.org"
 
+      - name: Detect package manager
+        id: detect-package-manager
+        run: |
+          if [ -f package-lock.json ]; then
+            echo "PACKAGE_MANAGER=npm" >> $GITHUB_ENV
+          elif [ -f pnpm-lock.yaml ]; then
+            echo "PACKAGE_MANAGER=pnpm" >> $GITHUB_ENV
+          elif [ -f yarn.lock ]; then
+            echo "PACKAGE_MANAGER=yarn" >> $GITHUB_ENV
+          else
+            echo "No supported package manager lock file found."
+            exit 1
+          fi
+
       - name: Install dependencies
-        run: npm ci
+        run: |
+          if [ "${{ env.PACKAGE_MANAGER }}" = "npm" ]; then
+            npm install
+          elif [ "${{ env.PACKAGE_MANAGER }}" = "pnpm" ]; then
+            npm install -g pnpm
+            pnpm install
+          elif [ "${{ env.PACKAGE_MANAGER }}" = "yarn" ]; then
+            yarn install
+          fi
 
       - name: Build the project
-        run: npm run build
+        run: |
+          if [ "${{ env.PACKAGE_MANAGER }}" = "npm" ]; then
+            npm run build
+          elif [ "${{ env.PACKAGE_MANAGER }}" = "pnpm" ]; then
+            pnpm run build
+          elif [ "${{ env.PACKAGE_MANAGER }}" = "yarn" ]; then
+            yarn build
+          fi
 
       - name: Publish to npm
         run: npm publish --provenance --access public
