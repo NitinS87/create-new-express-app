@@ -4,7 +4,7 @@ import pc from "picocolors";
 import { getPkgManager } from "./get-pkg-manager";
 import { getOnline } from "./is-online";
 import { install } from "./install";
-// import { isWriteable } from "./is-writeable";
+import { tryGitInit } from "./git"; // Import the tryGitInit function
 
 export async function createExpressApp(projectDirectory: string) {
   const templatePath = path.resolve(__dirname, "../templates/app-ts");
@@ -28,6 +28,14 @@ export async function createExpressApp(projectDirectory: string) {
     console.log(pc.green(`Installing dependencies using ${packageManager}...`));
     await install(packageManager, isOnline);
     console.log(pc.green("Dependencies installed successfully."));
+
+    // Initialize Git repository
+    const gitInitialized = tryGitInit(targetPath);
+    if (gitInitialized) {
+      console.log(pc.green("Initialized a new Git repository."));
+    } else {
+      console.log(pc.red("Failed to initialize a Git repository."));
+    }
 
     console.log(
       pc.green(
