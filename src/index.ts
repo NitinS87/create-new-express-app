@@ -4,6 +4,7 @@ import { Command } from "commander";
 import prompts from "prompts";
 import pc from "picocolors";
 import { createExpressApp } from "./create-express-app";
+import validateNpmPackageName from "validate-npm-package-name";
 
 const program = new Command();
 
@@ -22,6 +23,27 @@ program
         message: "Please enter the project directory:",
       });
       projectDirectory = response.projectDirectory;
+    }
+
+    if (!projectDirectory) {
+      console.log(pc.red("Project directory is required."));
+      process.exit(1);
+    }
+
+    const validationResult = validateNpmPackageName(projectDirectory);
+    if (!validationResult.validForNewPackages) {
+      console.log(pc.red("Invalid npm package name:"));
+      if (validationResult.errors) {
+        validationResult.errors.forEach((error) =>
+          console.log(pc.red(`  - ${error}`))
+        );
+      }
+      if (validationResult.warnings) {
+        validationResult.warnings.forEach((warning) =>
+          console.log(pc.yellow(`  - ${warning}`))
+        );
+      }
+      process.exit(1);
     }
 
     const confirmResponse = await prompts({
