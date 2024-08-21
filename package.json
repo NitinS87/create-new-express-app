@@ -9,7 +9,8 @@
     "build",
     "templates",
     "LICENSE",
-    "README.md"
+    "README.md",
+    "package.json"
   ],
   "scripts": {
     "build": "tsc",
@@ -17,7 +18,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/NitinS87/create-new-express-app.git"
+    "url": "git+https://github.com/NitinS87/create-new-express-app.git"
   },
   "author": "Nitin Sharma <nitins9868@gmail.com>",
   "license": "MIT",
