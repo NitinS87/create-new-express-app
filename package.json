@@ -2,8 +2,9 @@
   "name": "create-new-express-app",
   "version": "1.0.4",
   "description": "A CLI tool to create a TypeScript Express application with best practices",
+  "main": "build/index.js",
   "bin": {
-    "create-new-express-app": "./build/index.js"
+    "create-new-express-app": "build/index.js"
   },
   "files": [
     "build",
