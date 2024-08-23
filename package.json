@@ -1,6 +1,6 @@
 {
   "name": "create-new-express-app",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "A CLI tool to create a TypeScript Express application with best practices",
   "main": "dist/index.js",
   "bin": {
@@ -14,7 +14,8 @@
   ],
   "scripts": {
     "build": "tsc",
-    "start": "node dist/index.js"
+    "start": "node dist/index.js",
+    "postinstall": "chmod +x dist/index.js || exit 0"
   },
   "repository": {
     "type": "git",
