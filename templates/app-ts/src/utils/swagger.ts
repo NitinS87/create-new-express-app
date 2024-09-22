@@ -10,9 +10,9 @@ const options: swaggerJsdoc.Options = {
       description:
         "This is a simple REST API application made with Express and documented with Swagger",
     },
-    swagger: `http://localhost:${process.env.PORT}/api/docs/json`,
+    swagger: `http://localhost:${process.env.PORT || 8000}/api/docs/json`,
     externalDocs: {
-      url: `http://localhost:${process.env.PORT}/api/docs/json`,
+      url: `http://localhost:${process.env.PORT || 8000}/api/docs/json`,
       description: "OpenAPI - JSON",
     },
     tags: [
