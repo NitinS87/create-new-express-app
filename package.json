@@ -1,6 +1,6 @@
 {
   "name": "create-new-express-app",
-  "version": "1.0.9",
+  "version": "1.0.10",
   "description": "A CLI tool to create a TypeScript Express application with best practices",
   "main": "dist/index.js",
   "bin": {
