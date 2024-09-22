@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-/*
+/**
  * @swagger
  * components:
  *   schemas:
@@ -20,4 +20,4 @@ export const echoSchema = z.object({
   message: z.string().min(1).max(255),
 });
 
-export type EchoSchema = z.infer<typeof echoSchema>;
+export type EchoType = z.infer<typeof echoSchema>;
