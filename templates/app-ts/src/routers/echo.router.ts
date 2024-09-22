@@ -2,6 +2,7 @@ import { validateData } from "@/middlewares";
 import { echoSchema } from "@/schemas/echo.schema";
 import { echo } from "@/controllers";
 import express from "express";
+import asyncHandler from "@/utils/asyncHandler";
 const router = express.Router();
 
 /**
@@ -40,6 +41,6 @@ const router = express.Router();
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponseBody'
  */
-router.post("/", validateData(echoSchema), echo);
+router.post("/", validateData(echoSchema), asyncHandler(echo));
 
 export default router;

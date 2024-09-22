@@ -63,6 +63,7 @@ class RedisException extends DBException {
 }
 
 export {
+  DBException,
   DeleteFailedException,
   FetchFailedException,
   CreateFailedException,

@@ -79,6 +79,7 @@ class SendEmailException extends ApiException {
   }
 }
 export {
+  ApiException,
   InternalServerException,
   InvalidEndpointException,
   BadRequestException,

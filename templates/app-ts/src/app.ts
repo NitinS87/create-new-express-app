@@ -21,23 +21,25 @@ app.use("/api/docs/json", (req: Request, res: Response) => {
   res.send(specs);
 });
 
-/* 
-  @swagger
-  /:
-    get:
-      summary: Welcome to Microservice
-      description: Welcome to Microservice
-      responses:
-        200:
-          description: Welcome to Microservice
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: Welcome to Microservice
+/**
+ * @swagger
+ * /:
+ *   get:
+ *     tags:
+ *       - Default
+ *     summary: Welcome to Microservice
+ *     description: Welcome to Microservice
+ *     responses:
+ *       200:
+ *         description: Welcome to Microservice
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Welcome to Microservice
  */
 app.get("/", (req, res) => {
   res.status(StatusCodes.OK).json({ message: "Welcome to Microservice" });
@@ -47,7 +49,7 @@ app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(specs, { explorer: true })
 
 app.use("/api", router);
 
-app.use(handleErrors);
 app.use(notFound);
+app.use(handleErrors);
 
 export default app;

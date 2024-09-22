@@ -24,6 +24,10 @@ const options: swaggerJsdoc.Options = {
         name: "Echo",
         description: "Endpoints to echo back the request",
       },
+      {
+        name: "Default",
+        description: "Default endpoint",
+      },
     ],
   },
   apis: ["**/*.ts", "build/**/*.js"],
