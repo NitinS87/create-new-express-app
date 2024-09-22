@@ -1,4 +1,4 @@
-name: Release
+name: Release 🚀
 
 on:
   release:
@@ -14,15 +14,15 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: Checkout repository 🛒
         uses: actions/checkout@v4
 
-      - name: Set up Node.js
+      - name: Set up Node.js 🛠️
         uses: actions/setup-node@v4
         with:
           node-version: "20"
 
-      - name: Detect package manager
+      - name: Detect package manager 🔍
         id: detect-package-manager
         run: |
           if [ -f package-lock.json ]; then
@@ -35,8 +35,7 @@ jobs:
             echo "No supported package manager lock file found."
             exit 1
           fi
-
-      - name: Install dependencies
+      - name: Install dependencies 📦
         run: |
           if [ "${{ env.PACKAGE_MANAGER }}" = "npm" ]; then
             npm install
@@ -47,7 +46,7 @@ jobs:
             yarn install
           fi
 
-      - name: Build the project
+      - name: Build the project 🏗️
         run: |
           if [ "${{ env.PACKAGE_MANAGER }}" = "npm" ]; then
             npm run build
@@ -62,16 +61,16 @@ jobs:
     needs: build
 
     steps:
-      - name: Checkout repository
+      - name: Checkout repository 🛒
         uses: actions/checkout@v4
 
-      # Setup .npmrc file to publish to npm
-      - uses: actions/setup-node@v4
+      - name: Set up Node.js 🛠️
+        uses: actions/setup-node@v4
         with:
           node-version: "20.x"
           registry-url: "https://registry.npmjs.org"
 
-      - name: Detect package manager
+      - name: Detect package manager 🔍
         id: detect-package-manager
         run: |
           if [ -f package-lock.json ]; then
@@ -85,7 +84,7 @@ jobs:
             exit 1
           fi
 
-      - name: Install dependencies
+      - name: Install dependencies 📦
         run: |
           if [ "${{ env.PACKAGE_MANAGER }}" = "npm" ]; then
             npm install
@@ -96,7 +95,7 @@ jobs:
             yarn install
           fi
 
-      - name: Build the project
+      - name: Build the project 🏗️
         run: |
           if [ "${{ env.PACKAGE_MANAGER }}" = "npm" ]; then
             npm run build
@@ -106,7 +105,7 @@ jobs:
             yarn build
           fi
 
-      - name: Publish to npm
+      - name: Publish to npm 📤
         run: npm publish --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

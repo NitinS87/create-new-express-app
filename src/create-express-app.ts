@@ -17,10 +17,16 @@ export async function createExpressApp(projectDirectory: string) {
     //   return;
     // }
 
-    fs.copySync(templatePath, targetPath);
+    fs.copySync(templatePath, targetPath, { dereference: true });
     console.log(pc.green(`Express app created at ${targetPath}`));
 
     process.chdir(targetPath); // Change the current working directory to the target path
+
+    // Change the name of .gitignore-copy to .gitignore
+    fs.moveSync(
+      path.resolve(targetPath, ".gitignore-copy"),
+      path.resolve(targetPath, ".gitignore")
+    );
 
     const packageManager = getPkgManager();
     const isOnline = await getOnline();
