@@ -1,0 +1,72 @@
+name: Test Pipeline
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+
+jobs:
+  test:
+    name: Run Tests
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [18.x, 20.x]
+        package-manager: [npm, pnpm, yarn]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: ${{ matrix.package-manager }}
+
+      - name: Install pnpm
+        if: matrix.package-manager == 'pnpm'
+        uses: pnpm/action-setup@v3
+        with:
+          version: 8
+          run_install: false
+
+      - name: Install Yarn
+        if: matrix.package-manager == 'yarn'
+        run: npm install -g yarn
+
+      - name: Get package manager lockfile
+        id: lockfile
+        run: |
+          if [ "${{ matrix.package-manager }}" = "npm" ]; then
+            echo "file=package-lock.json" >> $GITHUB_OUTPUT
+          elif [ "${{ matrix.package-manager }}" = "yarn" ]; then
+            echo "file=yarn.lock" >> $GITHUB_OUTPUT
+          elif [ "${{ matrix.package-manager }}" = "pnpm" ]; then
+            echo "file=pnpm-lock.yaml" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Install dependencies (npm)
+        if: matrix.package-manager == 'npm'
+        run: npm ci
+
+      - name: Install dependencies (pnpm)
+        if: matrix.package-manager == 'pnpm'
+        run: pnpm install --frozen-lockfile
+
+      - name: Install dependencies (yarn)
+        if: matrix.package-manager == 'yarn'
+        run: yarn install --frozen-lockfile
+
+      - name: Run ESLint
+        run: ${{ matrix.package-manager }} run lint
+
+      - name: Run Prettier check
+        run: ${{ matrix.package-manager }} run prettier:check
+
+      - name: Run tests
+        run: ${{ matrix.package-manager }} run test
+
+      - name: Build
+        run: ${{ matrix.package-manager }} run build
