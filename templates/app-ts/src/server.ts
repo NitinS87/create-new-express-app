@@ -1,10 +1,12 @@
 import app from "@/app";
 import Server from "http";
-import dotenv from "dotenv";
 import logger from "@/utils/logger";
-dotenv.config();
+import { envConfig } from "@/config";
 
-const PORT = process.env.PORT || 8000;
+// Environment validation happens automatically when envConfig is imported
+// This ensures fail-fast behavior if configs are missing or malformed
+
+const PORT = envConfig.PORT;
 
 // Initialize Application Insights
 // appInsightsSetup(process.env.APPLICATIONINSIGHTS_CONNECTION_STRING || "");
