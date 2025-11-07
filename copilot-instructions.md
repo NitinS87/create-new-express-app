@@ -114,9 +114,13 @@ Example:
 const envSchema = z.object({
   NODE_ENV: z.enum(["development", "production", "test"]).default("development"),
   PORT: z.string().optional().default("8000")
-    .refine((val) => /^\d+$/.test(val))
+    .refine((val) => /^\d+$/.test(val), { 
+      message: "PORT must be a valid number" 
+    })
     .transform((val) => parseInt(val, 10))
-    .refine((val) => val > 0 && val < 65536),
+    .refine((val) => val > 0 && val < 65536, { 
+      message: "PORT must be between 1 and 65535" 
+    }),
   
   // Add new variables here
   DATABASE_URL: z.string().url().describe("Database connection string"),
@@ -204,10 +208,10 @@ throw new ApiError("Resource not found", StatusCodes.NOT_FOUND);
 
 ## Important Notes
 
-- **Don't commit `package-lock.json`**: It's generated and should be in `.gitignore`
+- **Package management**: This project uses npm. The `package-lock.json` was added to `.gitignore` for the CLI tool itself, but generated apps should commit their lock files for dependency consistency
 - **Don't commit `node_modules/`**: Always ignored
 - **Don't commit `dist/` from generated apps**: Build artifacts only
-- **Do commit `dist/` from CLI tool**: Required for npx to work
+- **CLI tool distribution**: The `dist/` folder is built during the npm publish process. During development, run `npm run build` to compile TypeScript
 - **Test generated apps**: Always verify generated apps build and run
 - **Environment validation is critical**: All env vars must be validated in the schema
 
