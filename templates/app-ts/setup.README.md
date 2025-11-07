@@ -796,6 +796,152 @@ PORT=5000
 NODE_ENV=development
 ```
 
+### Step 16.1: Add Environment Configuration Validation
+
+Create a new directory `config` in the `src` directory and add a file `env.config.ts` for environment validation.
+
+```bash
+mkdir src/config
+touch src/config/env.config.ts
+touch src/config/index.ts
+```
+
+Add the following code to `src/config/env.config.ts`:
+
+```typescript
+import { z } from "zod";
+import dotenv from "dotenv";
+import logger from "@/utils/logger";
+
+// Load environment variables from .env file
+dotenv.config();
+
+/**
+ * Environment configuration schema
+ * Defines all required and optional environment variables with validation rules
+ */
+const envSchema = z.object({
+  // Application Configuration
+  NODE_ENV: z
+    .enum(["development", "production", "test"])
+    .default("development")
+    .describe("The environment in which the application is running"),
+
+  PORT: z
+    .string()
+    .optional()
+    .default("8000")
+    .refine((val) => /^\d+$/.test(val), {
+      message: "PORT must be a valid number",
+    })
+    .transform((val) => parseInt(val, 10))
+    .refine((val) => val > 0 && val < 65536, {
+      message: "PORT must be between 1 and 65535",
+    })
+    .describe("The port on which the server will listen"),
+
+  // Add more environment variables here as needed
+  // DATABASE_URL: z.string().url().optional().describe("Database connection URL"),
+  // API_KEY: z.string().min(1).optional().describe("API key for external services"),
+  // LOG_LEVEL: z.enum(["error", "warn", "info", "debug"]).default("info"),
+});
+
+export type EnvConfig = z.infer<typeof envSchema>;
+
+/**
+ * Validates environment variables against the defined schema
+ * Exits the process with code 1 if validation fails
+ *
+ * @returns Validated and parsed environment configuration
+ */
+export function validateEnv(): EnvConfig {
+  try {
+    const parsed = envSchema.parse(process.env);
+
+    logger.info("✓ Environment variables validated successfully");
+    return parsed;
+  } catch (error) {
+    if (error instanceof z.ZodError) {
+      logger.error("❌ Environment validation failed:");
+      error.errors.forEach((err) => {
+        logger.error(`  - ${err.path.join(".")}: ${err.message}`);
+      });
+      logger.error("\nPlease check your .env file and ensure all required variables are set correctly.");
+      logger.error("Refer to .env.example for the list of required environment variables.\n");
+    } else {
+      logger.error("❌ Unexpected error during environment validation:", error);
+    }
+    process.exit(1);
+  }
+}
+
+/**
+ * Validated environment configuration
+ * WARNING: Importing this module will cause the process to exit if validation fails.
+ * This ensures fail-fast behavior and prevents the application from running with invalid configuration.
+ */
+export const envConfig = validateEnv();
+```
+
+Add the following code to `src/config/index.ts`:
+
+```typescript
+export { envConfig, validateEnv, type EnvConfig } from "./env.config";
+```
+
+Update `src/server.ts` to use the validated environment configuration:
+
+```typescript
+import app from "@/app";
+import Server from "http";
+import logger from "@/utils/logger";
+import { envConfig } from "@/config";
+
+/**
+ * Environment validation happens automatically when envConfig is imported.
+ * WARNING: The application will exit immediately if environment validation fails.
+ * This ensures fail-fast behavior and prevents running with invalid configuration.
+ */
+
+const PORT = envConfig.PORT;
+
+const server = Server.createServer(app);
+
+server.listen(PORT, () => {
+  logger.info(`App running at http://localhost:${PORT}`);
+});
+```
+
+Update the `.env.example` file to document all environment variables:
+
+```env
+# Application Configuration
+# The port on which the server will listen (must be between 1 and 65535)
+PORT=8000
+
+# The environment in which the application is running
+# Options: development, production, test
+NODE_ENV=development
+
+# Database Configuration (uncomment and configure if using a database)
+# DATABASE_URL=postgresql://user:password@localhost:5432/dbname
+
+# External API Configuration (uncomment if needed)
+# API_KEY=your_api_key_here
+
+# Logging Configuration (uncomment if needed)
+# LOG_LEVEL=info
+
+# Add additional environment variables below as your application grows
+```
+
+This setup provides:
+- **Automatic validation** of environment variables at startup using Zod schemas
+- **Type-safe configuration** with TypeScript types inferred from the schema
+- **Fail-fast behavior** with clear error messages if configs are missing or malformed
+- **Easy extensibility** - just add new variables to the schema and parse object
+- **Documentation** in .env.example for all required and optional variables
+
 ## Step 17: Add development scripts
 
 Install the following development dependencies.
