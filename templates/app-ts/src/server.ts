@@ -3,8 +3,11 @@ import Server from "http";
 import logger from "@/utils/logger";
 import { envConfig } from "@/config";
 
-// Environment validation happens automatically when envConfig is imported
-// This ensures fail-fast behavior if configs are missing or malformed
+/**
+ * Environment validation happens automatically when envConfig is imported.
+ * WARNING: The application will exit immediately if environment validation fails.
+ * This ensures fail-fast behavior and prevents running with invalid configuration.
+ */
 
 const PORT = envConfig.PORT;
 

@@ -829,12 +829,15 @@ const envSchema = z.object({
 
   PORT: z
     .string()
-    .regex(/^\d+$/, "PORT must be a valid number")
+    .optional()
+    .default("8000")
+    .refine((val) => /^\d+$/.test(val), {
+      message: "PORT must be a valid number",
+    })
     .transform((val) => parseInt(val, 10))
     .refine((val) => val > 0 && val < 65536, {
       message: "PORT must be between 1 and 65535",
     })
-    .default("8000")
     .describe("The port on which the server will listen"),
 
   // Add more environment variables here as needed
@@ -853,11 +856,7 @@ export type EnvConfig = z.infer<typeof envSchema>;
  */
 export function validateEnv(): EnvConfig {
   try {
-    const parsed = envSchema.parse({
-      NODE_ENV: process.env.NODE_ENV,
-      PORT: process.env.PORT,
-      // Add more environment variables here
-    });
+    const parsed = envSchema.parse(process.env);
 
     logger.info("✓ Environment variables validated successfully");
     return parsed;
@@ -876,7 +875,11 @@ export function validateEnv(): EnvConfig {
   }
 }
 
-// Export validated config
+/**
+ * Validated environment configuration
+ * WARNING: Importing this module will cause the process to exit if validation fails.
+ * This ensures fail-fast behavior and prevents the application from running with invalid configuration.
+ */
 export const envConfig = validateEnv();
 ```
 
@@ -894,8 +897,11 @@ import Server from "http";
 import logger from "@/utils/logger";
 import { envConfig } from "@/config";
 
-// Environment validation happens automatically when envConfig is imported
-// This ensures fail-fast behavior if configs are missing or malformed
+/**
+ * Environment validation happens automatically when envConfig is imported.
+ * WARNING: The application will exit immediately if environment validation fails.
+ * This ensures fail-fast behavior and prevents running with invalid configuration.
+ */
 
 const PORT = envConfig.PORT;
 
