@@ -1,12 +1,17 @@
 import fs from "fs-extra";
 import path from "path";
 import pc from "picocolors";
-import { getPkgManager } from "./get-pkg-manager";
-import { getOnline } from "./is-online";
-import { install } from "./install";
+import {
+  promptForPackageManager,
+  installDependencies,
+  type PackageManager,
+} from "./cli/package-manager";
 import { tryGitInit } from "./git"; // Import the tryGitInit function
 
-export async function createExpressApp(projectDirectory: string) {
+export async function createExpressApp(
+  projectDirectory: string,
+  shouldInstall: boolean = true
+) {
   const templatePath = path.resolve(__dirname, "../templates/app-ts");
   const targetPath = path.resolve(process.cwd(), projectDirectory);
 
@@ -22,12 +27,23 @@ export async function createExpressApp(projectDirectory: string) {
 
     process.chdir(targetPath); // Change the current working directory to the target path
 
-    const packageManager = getPkgManager();
-    const isOnline = await getOnline();
+    let packageManager: PackageManager;
 
-    console.log(pc.green(`Installing dependencies using ${packageManager}...`));
-    await install(packageManager, isOnline);
-    console.log(pc.green("Dependencies installed successfully."));
+    if (shouldInstall) {
+      // Prompt user for package manager
+      packageManager = await promptForPackageManager();
+
+      // Install dependencies
+      await installDependencies(targetPath, [], [], packageManager);
+      console.log(pc.green("Dependencies installed successfully."));
+    } else {
+      console.log(
+        pc.yellow(
+          "Skipping dependency installation. Run your package manager's install command manually."
+        )
+      );
+      packageManager = "npm"; // Default for display purposes
+    }
 
     // Initialize Git repository
     const gitInitialized = tryGitInit(targetPath);

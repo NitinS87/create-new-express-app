@@ -15,7 +15,8 @@ program
   )
   .version("1.0.0")
   .argument("[project-directory]", "Directory to create the new Express app")
-  .action(async (projectDirectory) => {
+  .option("--no-install", "Skip dependency installation")
+  .action(async (projectDirectory, options) => {
     if (!projectDirectory) {
       const response = await prompts({
         type: "text",
@@ -56,7 +57,7 @@ program
     });
 
     if (confirmResponse.value) {
-      createExpressApp(projectDirectory);
+      createExpressApp(projectDirectory, options.install);
     } else {
       console.log(pc.red("Operation cancelled."));
     }
