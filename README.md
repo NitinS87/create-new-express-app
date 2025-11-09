@@ -22,6 +22,25 @@ Or, you can use the following command to create a new Express app using npx:
 npx create-new-express-app my-express-app
 ```
 
+### Package Manager Selection
+
+The CLI will prompt you to select your preferred package manager for installing dependencies. You can choose from:
+- **Auto-detect**: Automatically detects your package manager from the environment (default)
+- **npm**: Use npm for dependency installation
+- **pnpm**: Use pnpm for dependency installation
+- **yarn**: Use yarn for dependency installation
+- **bun**: Use bun for dependency installation
+
+### Skip Dependency Installation
+
+If you want to skip automatic dependency installation, you can use the `--no-install` flag:
+
+```bash
+npx create-new-express-app my-express-app --no-install
+```
+
+This is useful if you want to review the generated project before installing dependencies or if you prefer to install them manually.
+
 3. Change to the newly created app directory by running the following command:
 
 ```bash

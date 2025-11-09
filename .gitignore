@@ -120,3 +120,6 @@ test-results
 # environment variables
 .env
 !.env.example
+
+# macOS system files
+.DS_Store

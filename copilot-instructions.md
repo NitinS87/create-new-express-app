@@ -11,7 +11,9 @@ create-new-express-app/
 ├── src/                          # CLI source code
 │   ├── index.ts                  # CLI entry point
 │   ├── create-express-app.ts     # Main app creation logic
-│   ├── install.ts                # Package installation logic
+│   ├── cli/
+│   │   └── package-manager.ts    # Package manager prompt & installer
+│   ├── install.ts                # Package installation logic (legacy)
 │   ├── git.ts                    # Git initialization
 │   └── ...                       # Other utilities
 ├── templates/
@@ -39,6 +41,7 @@ create-new-express-app/
 - **TypeScript**: Strongly typed JavaScript
 - **Commander**: Command-line interface framework
 - **Prompts**: Interactive CLI prompts
+- **cross-spawn**: Cross-platform child process spawning
 - **fs-extra**: File system operations
 - **fast-glob**: File pattern matching
 - **picocolors**: Terminal colors
@@ -58,28 +61,56 @@ create-new-express-app/
 
 ## Key Features
 
-### 1. Environment Validation (NEW)
+### 1. Package Manager Selection (NEW)
+- Interactive prompt for package manager selection
+- Located in `src/cli/package-manager.ts`
+- Supports npm, pnpm, yarn, bun, and auto-detect
+- Users can skip installation with `--no-install` flag
+- Unified installation interface via `installDependencies()`
+
+**Usage:**
+```bash
+# Interactive prompt (default)
+npx create-new-express-app my-app
+
+# Skip installation
+npx create-new-express-app my-app --no-install
+```
+
+**API:**
+```typescript
+// Detect package manager from environment
+const pm = detectPackageManager(); // Returns: PackageManager
+
+// Prompt user for selection
+const selected = await promptForPackageManager(); // Returns: Promise<PackageManager>
+
+// Install dependencies
+await installDependencies(projectPath, packageManager);
+```
+
+### 2. Environment Validation
 - Located in `templates/app-ts/src/config/env.config.ts`
 - Uses Zod schemas to validate environment variables at startup
 - Fail-fast behavior: app exits if config is invalid
 - Type-safe configuration access throughout the app
 - Clear error messages referencing `.env.example`
 
-### 2. Predefined Folder Structure
+### 3. Predefined Folder Structure
 - Follows MVC-like architecture
 - Separation of concerns (controllers, routers, middleware, schemas)
 - Consistent naming conventions
 
-### 3. Request Validation
+### 4. Request Validation
 - Zod schemas for body, params, and query validation
 - Validation middleware in `templates/app-ts/src/middlewares/validation.middleware.ts`
 
-### 4. Error Handling
+### 5. Error Handling
 - Custom error classes in `templates/app-ts/src/exceptions/`
 - Centralized error handling middleware
 - API and database exception types
 
-### 5. API Documentation
+### 6. API Documentation
 - Auto-generated Swagger docs from JSDoc comments
 - Available at `/api/docs` endpoint
 
@@ -166,10 +197,16 @@ throw new ApiError("Resource not found", StatusCodes.NOT_FOUND);
 
 ### CLI Tool Development
 
-1. **Template Copying**: Use `templates/helpers/copy.ts` for file operations
-2. **Interactive Prompts**: Use `prompts` library for user input
-3. **Error Messages**: Use `picocolors` for colored terminal output
-4. **Git Operations**: Use `templates/helpers/git.ts` for git initialization
+1. **Package Manager Selection**: Use `src/cli/package-manager.ts` for package manager operations
+   - `detectPackageManager()`: Auto-detects from environment
+   - `promptForPackageManager()`: Interactive user selection
+   - `installDependencies()`: Unified installation interface
+   - Supports npm, pnpm, yarn, and bun
+   
+2. **Template Copying**: Use `templates/helpers/copy.ts` for file operations
+3. **Interactive Prompts**: Use `prompts` library for user input
+4. **Error Messages**: Use `picocolors` for colored terminal output
+5. **Git Operations**: Use `src/git.ts` for git initialization
 
 ### Testing
 
@@ -205,10 +242,19 @@ throw new ApiError("Resource not found", StatusCodes.NOT_FOUND);
 1. Update source files in `src/`
 2. Run `npm run build` to compile
 3. Test with `node dist/index.js test-app`
+4. Test with `--no-install` flag: `node dist/index.js test-app --no-install`
+
+### Adding Support for a New Package Manager
+1. Update `PackageManager` type in `src/cli/package-manager.ts`
+2. Add detection logic in `detectPackageManager()`
+3. Add choice option in `promptForPackageManager()`
+4. Add install command logic in `installDependencies()`
+5. Update documentation in README.md
 
 ## Important Notes
 
-- **Package management**: This project uses npm. The `package-lock.json` was added to `.gitignore` for the CLI tool itself, but generated apps should commit their lock files for dependency consistency
+- **Package management**: The CLI now prompts users to choose their preferred package manager (npm, pnpm, yarn, bun). Auto-detection is also available. Use `--no-install` flag to skip installation.
+- **Package manager module**: Located in `src/cli/package-manager.ts` - use this for all package manager operations
 - **Don't commit `node_modules/`**: Always ignored
 - **Don't commit `dist/` from generated apps**: Build artifacts only
 - **CLI tool distribution**: The `dist/` folder is built during the npm publish process. During development, run `npm run build` to compile TypeScript
