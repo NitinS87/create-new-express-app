@@ -1,3 +1,7 @@
+/**
+ * ORM and Database selection module for create-new-express-app CLI
+ * Provides interactive prompts and validation for ORM and database choices
+ */
 import prompts from "prompts";
 import pc from "picocolors";
 
