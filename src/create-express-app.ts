@@ -6,6 +6,8 @@ import {
   installDependencies,
   type PackageManager,
 } from "./cli/package-manager";
+import { promptForORMDatabase } from "./cli/orm-database";
+import { scaffoldORM, patchPackageJson } from "./scaffold-orm";
 import { tryGitInit } from "./git"; // Import the tryGitInit function
 
 export async function createExpressApp(
@@ -27,6 +29,15 @@ export async function createExpressApp(
 
     process.chdir(targetPath); // Change the current working directory to the target path
 
+    // Prompt for ORM and database selection
+    const { orm, database } = await promptForORMDatabase();
+
+    // Scaffold ORM files
+    await scaffoldORM(targetPath, orm, database);
+
+    // Patch package.json with ORM dependencies and scripts
+    await patchPackageJson(targetPath, orm, database);
+
     let packageManager: PackageManager;
 
     if (shouldInstall) {
@@ -36,6 +47,34 @@ export async function createExpressApp(
       // Install dependencies
       await installDependencies(targetPath, packageManager);
       console.log(pc.green("Dependencies installed successfully."));
+
+      // Show ORM-specific next steps
+      if (orm !== "none" && database) {
+        console.log(pc.green("\n📦 Database setup next steps:"));
+        console.log(pc.cyan("1. Update DATABASE_URL in .env file"));
+        if (orm === "prisma") {
+          console.log(
+            pc.cyan(`2. Run: ${packageManager} run db:push (to push schema)`)
+          );
+          console.log(
+            pc.cyan(`3. Run: ${packageManager} run db:seed (to seed data)`)
+          );
+        } else if (orm === "drizzle") {
+          console.log(
+            pc.cyan(
+              `2. Run: ${packageManager} run db:generate (to generate migrations)`
+            )
+          );
+          console.log(
+            pc.cyan(
+              `3. Run: ${packageManager} run db:push (to apply migrations)`
+            )
+          );
+          console.log(
+            pc.cyan(`4. Run: ${packageManager} run db:seed (to seed data)`)
+          );
+        }
+      }
     } else {
       console.log(
         pc.yellow(
@@ -43,6 +82,14 @@ export async function createExpressApp(
         )
       );
       packageManager = "npm"; // Default for display purposes
+
+      if (orm !== "none" && database) {
+        console.log(
+          pc.yellow(
+            "\n📦 Remember to install dependencies and set up your database!"
+          )
+        );
+      }
     }
 
     // Initialize Git repository
