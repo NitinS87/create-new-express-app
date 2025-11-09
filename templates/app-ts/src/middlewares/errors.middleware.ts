@@ -1,6 +1,7 @@
 import { ApiException, DBException } from "@/exceptions";
 import { type Request, type Response, type NextFunction } from "express";
 import { StatusCodes } from "http-status-codes";
+import { envConfig } from "@/config";
 
 export const notFound = (req: Request, res: Response, _next: NextFunction): void => {
   const error = new Error(`Not Found - ${req.originalUrl}`);
@@ -21,7 +22,7 @@ export const handleErrors = (
     const statusCode = res.statusCode === StatusCodes.OK ? StatusCodes.BAD_REQUEST : res.statusCode;
     res.status(statusCode).json({
       code: statusCode,
-      error: process.env.NODE_ENV === "production" ? "🥞" : error.stack,
+      error: envConfig.NODE_ENV === "production" ? "🥞" : error.stack,
       message: error.message,
       description: error.name,
     });
