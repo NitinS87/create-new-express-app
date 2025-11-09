@@ -34,7 +34,7 @@ export async function createExpressApp(
       packageManager = await promptForPackageManager();
 
       // Install dependencies
-      await installDependencies(targetPath, [], [], packageManager);
+      await installDependencies(targetPath, packageManager);
       console.log(pc.green("Dependencies installed successfully."));
     } else {
       console.log(

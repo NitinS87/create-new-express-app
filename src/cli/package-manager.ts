@@ -64,15 +64,11 @@ export async function promptForPackageManager(
 /**
  * Install dependencies using the specified package manager
  * @param projectPath Path to the project directory
- * @param deps Regular dependencies to install
- * @param devDeps Development dependencies to install
  * @param chosenManager The package manager to use
  * @returns A Promise that resolves when installation is complete
  */
 export async function installDependencies(
   projectPath: string,
-  deps: string[],
-  devDeps: string[],
   chosenManager: PackageManager
 ): Promise<void> {
   return new Promise((resolve, reject) => {
@@ -86,12 +82,7 @@ export async function installDependencies(
 
       switch (chosenManager) {
         case "yarn":
-          // Yarn uses 'add' for installing dependencies
-          if (deps.length > 0 || devDeps.length > 0) {
-            installCmd = ["install"];
-          } else {
-            installCmd = ["install"];
-          }
+          installCmd = ["install"];
           break;
         case "pnpm":
           installCmd = ["install"];
@@ -132,7 +123,7 @@ export async function installDependencies(
       child.on("error", (error) => {
         reject(error);
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
       reject(error);
     }
   });

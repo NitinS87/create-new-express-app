@@ -86,7 +86,7 @@ const pm = detectPackageManager(); // Returns: PackageManager
 const selected = await promptForPackageManager(); // Returns: Promise<PackageManager>
 
 // Install dependencies
-await installDependencies(projectPath, deps, devDeps, packageManager);
+await installDependencies(projectPath, packageManager);
 ```
 
 ### 2. Environment Validation
@@ -206,7 +206,7 @@ throw new ApiError("Resource not found", StatusCodes.NOT_FOUND);
 2. **Template Copying**: Use `templates/helpers/copy.ts` for file operations
 3. **Interactive Prompts**: Use `prompts` library for user input
 4. **Error Messages**: Use `picocolors` for colored terminal output
-5. **Git Operations**: Use `templates/helpers/git.ts` for git initialization
+5. **Git Operations**: Use `src/git.ts` for git initialization
 
 ### Testing
 
