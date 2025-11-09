@@ -1,3 +1,7 @@
+/**
+ * ORM Scaffolding Module
+ * Handles creation of ORM-specific files and package.json patching
+ */
 import fs from "fs-extra";
 import path from "path";
 import pc from "picocolors";

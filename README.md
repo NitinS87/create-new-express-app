@@ -31,6 +31,34 @@ The CLI will prompt you to select your preferred package manager for installing 
 - **yarn**: Use yarn for dependency installation
 - **bun**: Use bun for dependency installation
 
+### ORM and Database Selection
+
+The CLI will prompt you to select an ORM (Object-Relational Mapping) tool and database for your application:
+
+#### ORM Options:
+- **None**: Skip ORM setup (you can add it manually later)
+- **Prisma**: Modern TypeScript ORM with auto-generated type-safe queries
+  - Supports: PostgreSQL, MongoDB, SQL Server
+  - Auto-generates: `prisma/schema.prisma`, seed file, and database scripts
+- **Drizzle**: Lightweight and performant TypeScript ORM
+  - Currently supports: PostgreSQL (in this CLI)
+  - Auto-generates: `src/db/schema.ts`, `drizzle.config.ts`, seed file, and database scripts
+
+#### Database Options:
+- **PostgreSQL**: Open-source relational database
+- **MongoDB**: Document-oriented NoSQL database (Prisma only)
+- **SQL Server**: Microsoft SQL Server relational database (Prisma only)
+
+**Note**: The CLI validates ORM-database combinations and will only show compatible options.
+
+#### Generated Database Scripts:
+When you select an ORM, the following npm scripts are added to your `package.json`:
+- `db:generate`: Generate Prisma client or Drizzle migrations
+- `db:push`: Push schema changes to the database
+- `db:migrate`: Run database migrations
+- `db:seed`: Seed the database with initial data
+- `db:studio`: Open database GUI (Prisma Studio or Drizzle Studio)
+
 ### Skip Dependency Installation
 
 If you want to skip automatic dependency installation, you can use the `--no-install` flag:
@@ -59,3 +87,5 @@ The Create New Express App is a great tool for quickly creating a new Express ap
 - Jest: The Create New Express App includes Jest for testing.
 - ESLint: The Create New Express App includes ESLint for linting your code.
 - Prettier: The Create New Express App includes Prettier for code formatting.
+- **ORM Integration**: Choose between Prisma or Drizzle ORM with automatic setup for PostgreSQL, MongoDB, or SQL Server.
+- **Database Setup**: Automatically generates schema files, seed scripts, and database configuration.
