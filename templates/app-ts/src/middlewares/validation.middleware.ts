@@ -5,9 +5,9 @@ import { StatusCodes } from "http-status-codes";
 import logger from "@/utils/logger";
 
 type ValidationSchemas = {
-  body?: z.ZodTypeAny;
-  query?: z.ZodTypeAny;
-  params?: z.ZodTypeAny;
+  body?: z.ZodType<Record<string, unknown>>;
+  query?: z.ZodType<Record<string, unknown>>;
+  params?: z.ZodType<Record<string, unknown>>;
 };
 
 export function validateData(schemas: ValidationSchemas) {
@@ -31,14 +31,14 @@ export function validateData(schemas: ValidationSchemas) {
           return `${field} is ${message.toLowerCase()}.`;
         });
 
-        res.status(StatusCodes.BAD_REQUEST).json({
+        return void res.status(StatusCodes.BAD_REQUEST).json({
           message: `Please correct the following errors: ${errorMessages.join(" ")}`,
           description: error.issues,
           code: StatusCodes.BAD_REQUEST,
         });
       } else {
         logger.error("Unexpected validation error", error);
-        res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+        return void res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
           message: "Internal validation error",
           code: StatusCodes.INTERNAL_SERVER_ERROR,
         });
