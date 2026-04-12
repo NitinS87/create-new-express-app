@@ -92,13 +92,13 @@ router.get("/:id", validateData({ params: echoIdSchema }), asyncHandler(getEchoB
  *     parameters:
  *       - in: query
  *         name: search
- *         required: true
+ *         required: false
  *         schema:
  *           type: string
  *           minLength: 1
  *           maxLength: 255
  *           example: Hello, World!
- *         description: The search query.
+ *         description: The search query (optional).
  *     responses:
  *       200:
  *         description: Successful response
@@ -139,13 +139,13 @@ router.get("/", validateData({ query: echoQuerySchema }), asyncHandler(getEchoBy
  *         description: The ID of the message
  *       - in: query
  *         name: search
- *         required: true
+ *         required: false
  *         schema:
  *           type: string
  *           minLength: 1
  *           maxLength: 255
  *           example: Hello, Search!
- *         description: The search query
+ *         description: The search query (optional)
  *     requestBody:
  *       required: true
  *       content:

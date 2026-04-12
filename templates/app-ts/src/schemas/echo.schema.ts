@@ -56,12 +56,10 @@ export type EchoIdType = z.infer<typeof echoIdSchema>;
  *           minLength: 1
  *           maxLength: 255
  *           example: Hello, World!
- *       required:
- *         - search
  *       description: The search query.
  */
 export const echoQuerySchema = z.object({
-  search: z.string().min(1).max(255),
+  search: z.string().min(1).max(255).optional(),
 });
 
 export type EchoQueryType = z.infer<typeof echoQuerySchema>;
