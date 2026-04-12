@@ -109,7 +109,9 @@ router.get("/:id", validateData({ params: echoIdSchema }), asyncHandler(getEchoB
  *               properties:
  *                 search:
  *                   type: string
+ *                   nullable: true
  *                   example: Hello, World!
+ *                   description: Present only when the search query parameter is provided.
  *       400:
  *         description: Bad Request
  *         content:
@@ -163,13 +165,18 @@ router.get("/", validateData({ query: echoQuerySchema }), asyncHandler(getEchoBy
  *           application/json:
  *             schema:
  *               type: object
+ *               required:
+ *                 - id
+ *                 - message
  *               properties:
  *                 id:
  *                   type: string
- *                   example: 12345
+ *                   example: "12345"
  *                 search:
  *                   type: string
+ *                   nullable: true
  *                   example: Hello, Search!
+ *                   description: Present only when the search query parameter is provided.
  *                 message:
  *                   type: string
  *                   example: "Hello, world!"
